@@ -12,7 +12,7 @@ def getUser(userid=None):
     conn = sqlite3.connect(current_app.config['DATABASE'])
     cursor = conn.cursor()
     if userid is None:
-        return jsonify({'error': 'User ID is required'}), 400
+        return jsonify({'error': 'User ID is required'}), 400 # Return 400 Bad Request if userid is missing
 
     cursor.execute("SELECT * FROM users WHERE id = ?", (userid,))
     user = cursor.fetchone()
@@ -24,7 +24,7 @@ def getUser(userid=None):
             'email': user[2]
         })
     else:
-        return jsonify({'message': 'User not found'}), 404
+        return jsonify({'message': 'User not found'}), 404 # Return 404 Not Found if user is not found
 
 # Create user
 @main.route('/user/', methods=['POST'])
@@ -52,4 +52,4 @@ def log_response(response):
 @main.errorhandler(Exception)
 def handle_exception(e):
     request.log_exception = traceback.format_exc()
-    return jsonify({'error': 'An internal server error occurred'}), 500
+    return jsonify({'error': 'An internal server error occurred'}), 500 # Return 500 Error
